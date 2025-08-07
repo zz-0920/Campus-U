@@ -1,0 +1,327 @@
+// Home页面样式
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  .title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    background: linear-gradient(135deg, #abf4ef 0%, #f17f99 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .search {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #e9ecef;
+      transform: scale(1.05);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: #666;
+    }
+  }
+}
+
+.content {
+  padding: 16px 0;
+  min-height: calc(100vh - 120px);
+  background: #f8f9fa;
+
+  .content-item {
+    margin: 16px 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .content-item-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .content-item-title-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .content-item-title-name {
+        flex: 1;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0;
+      }
+
+      .content-item-title-time {
+        font-size: 14px;
+        color: #999;
+      }
+    }
+
+    .content-item-content {
+      margin-bottom: 16px;
+
+      p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        margin: 0 0 12px 0;
+      }
+
+      .content-item-content-image {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 12px;
+
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      }
+    }
+
+    .content-item-footer {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+
+      .content-item-footer-item {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 12px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          color: #666;
+
+          &:hover {
+            background: #f8f9fa;
+            color: #1890ff;
+          }
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+
+          p {
+            font-size: 14px;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  padding: 8px 0;
+  z-index: 100;
+
+  .footer-item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .footer-item-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #666;
+      min-width: 60px;
+
+      &:hover,
+      &.active {
+        color: #1890ff;
+        background: rgba(24, 144, 255, 0.1);
+      }
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      p {
+        font-size: 12px;
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 16px;
+
+    .title {
+      font-size: 20px;
+    }
+
+    .search {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .content {
+    .content-item {
+      margin: 8px 12px;
+      padding: 16px;
+      border-radius: 12px;
+
+      .content-item-title {
+        .content-item-title-avatar {
+          width: 40px;
+          height: 40px;
+        }
+
+        .content-item-title-name {
+          font-size: 15px;
+        }
+
+        .content-item-title-time {
+          font-size: 13px;
+        }
+      }
+
+      .content-item-content {
+        p {
+          font-size: 15px;
+        }
+      }
+
+      .content-item-footer {
+        .content-item-footer-item {
+          gap: 16px;
+
+          > div {
+            padding: 6px 8px;
+
+            svg {
+              width: 16px;
+              height: 16px;
+            }
+
+            p {
+              font-size: 13px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+    .footer-item {
+      .footer-item-icon {
+        padding: 6px 12px;
+        min-width: 50px;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        p {
+          font-size: 11px;
+        }
+      }
+    }
+  }
+}
+
+// 动画效果
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-item {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

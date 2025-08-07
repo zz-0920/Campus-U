@@ -1,0 +1,426 @@
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #b5ebf6 0%, #ffc1fd 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.backgroundDecoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+
+  .circle1, .circle2, .circle3 {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .circle1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .circle2 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+  }
+
+  .circle3 {
+    width: 100px;
+    height: 100px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 400px;
+  min-height: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+  animation: slideUp 0.6s ease-out;
+  margin: 10px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logoContainer {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #b5ebf6 0%, #ffc1fd 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+  font-weight: 400;
+}
+
+.form {
+  margin-bottom: 24px;
+}
+
+.formItem {
+  margin-bottom: 20px;
+
+  :global(.rv-field__label) {
+    display: none;
+  }
+}
+
+.input {
+  height: 52px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 16px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #667eea;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  :global(.rv-field__control) {
+    padding: 0 16px;
+  }
+}
+
+.inputIcon {
+  font-size: 18px;
+  margin-right: 8px;
+  opacity: 0.6;
+}
+
+.submitButton {
+  height: 52px;
+  background: linear-gradient(135deg, #b5ebf6 0%, #ffc1fd 100%);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(181, 235, 246, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(181, 235, 246, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.footer {
+  text-align: center;
+}
+
+.registerTip {
+  font-size: 14px;
+  color: #718096;
+  margin: 0;
+}
+
+.registerLink {
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 4px;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #764ba2;
+    text-decoration: underline;
+  }
+}
+
+/* 超小屏幕 (手机竖屏) */
+@media (max-width: 360px) {
+  .container {
+    padding: 8px;
+  }
+
+  .loginCard {
+    padding: 20px 16px;
+    border-radius: 16px;
+    margin: 5px;
+  }
+
+  .logoContainer {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 16px;
+  }
+
+  .logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .header {
+    margin-bottom: 24px;
+  }
+
+  .input {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .submitButton {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .formItem {
+    margin-bottom: 16px;
+  }
+
+  .backgroundDecoration {
+    .circle1 {
+      width: 120px;
+      height: 120px;
+    }
+
+    .circle2 {
+      width: 80px;
+      height: 80px;
+    }
+
+    .circle3 {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
+/* 小屏幕 (手机) */
+@media (min-width: 361px) and (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .loginCard {
+    padding: 28px 20px;
+    border-radius: 20px;
+    margin: 8px;
+  }
+
+  .logoContainer {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 18px;
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .header {
+    margin-bottom: 28px;
+  }
+
+  .input {
+    height: 48px;
+    font-size: 15px;
+  }
+
+  .submitButton {
+    height: 48px;
+    font-size: 15px;
+  }
+
+  .formItem {
+    margin-bottom: 18px;
+  }
+
+  .backgroundDecoration {
+    .circle1 {
+      width: 150px;
+      height: 150px;
+    }
+
+    .circle2 {
+      width: 100px;
+      height: 100px;
+    }
+
+    .circle3 {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+/* 中等屏幕 (平板竖屏) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .loginCard {
+    padding: 36px 28px;
+    max-width: 450px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+}
+
+/* 大屏幕优化 */
+@media (min-width: 1200px) {
+  .loginCard {
+    max-width: 450px;
+    padding: 48px 40px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+}
+
+/* 横屏适配 */
+@media (max-height: 600px) and (orientation: landscape) {
+  .container {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .loginCard {
+    padding: 24px 32px;
+    margin: 5px;
+  }
+
+  .header {
+    margin-bottom: 20px;
+  }
+
+  .logoContainer {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 12px;
+  }
+
+  .logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .formItem {
+    margin-bottom: 16px;
+  }
+
+  .input {
+    height: 44px;
+  }
+
+  .submitButton {
+    height: 44px;
+  }
+}
