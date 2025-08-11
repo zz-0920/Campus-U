@@ -11,7 +11,7 @@ export default function () {
     const navigate = useNavigate()
     const { state } = useLocation()
     
-    if (state) {
+    if (state && state.fromRegister) {
         form.setFieldsValue(state)
     }
 
@@ -19,6 +19,7 @@ export default function () {
         setLoading(true)
         try {
             const res = await axios.post('/user/login', values)
+            console.log(res)
             localStorage.setItem('userInfo', JSON.stringify(res.data))
             localStorage.setItem('accessToken', res.accessToken)
             localStorage.setItem('refreshToken', res.refreshToken)

@@ -2,13 +2,13 @@ const jwt = require('jsonwebtoken');
 
 function sign(options, time) {
     return jwt.sign(options, 'zz是个大帅哥', {
-        expiresIn: time || '24h' // 24小时过期
+        expiresIn: time || '24h' 
     })
 }
 
 function verify() {
     return async (ctx, next) => {
-        // 修复1: 正确提取token
+        // console.log(ctx.headers);
         const authHeader = ctx.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             ctx.status = 401;

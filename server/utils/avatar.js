@@ -3,24 +3,24 @@ const fs = require('fs');
 
 // 默认头像列表
 const defaultAvatars = [
-    '/images/avatars/avatar1.png',
-    '/images/avatars/avatar2.png',
-    '/images/avatars/avatar3.png',
-    '/images/avatars/avatar4.png',
-    '/images/avatars/avatar5.png',
-    '/images/avatars/avatar6.png',
-    '/images/avatars/avatar7.png',
-    '/images/avatars/avatar8.png',
-    '/images/avatars/avatar9.png',
-    '/images/avatars/avatar10.png',
-    '/images/avatars/avatar11.png',
-    '/images/avatars/avatar12.png',
-    '/images/avatars/avatar13.png',
-    '/images/avatars/avatar14.png',
-    '/images/avatars/avatar15.png',
-    '/images/avatars/avatar16.png',
-    '/images/avatars/avatar17.png',
-    '/images/avatars/avatar18.png'
+    'http://localhost:3000/images/avatars/avatar1.png',
+    'http://localhost:3000/images/avatars/avatar2.png',
+    'http://localhost:3000/images/avatars/avatar3.png',
+    'http://localhost:3000/images/avatars/avatar4.png',
+    'http://localhost:3000/images/avatars/avatar5.png',
+    'http://localhost:3000/images/avatars/avatar6.png',
+    'http://localhost:3000/images/avatars/avatar7.png',
+    'http://localhost:3000/images/avatars/avatar8.png',
+    'http://localhost:3000/images/avatars/avatar9.png',
+    'http://localhost:3000/images/avatars/avatar10.png',
+    'http://localhost:3000/images/avatars/avatar11.png',
+    'http://localhost:3000/images/avatars/avatar12.png',
+    'http://localhost:3000/images/avatars/avatar13.png',
+    'http://localhost:3000/images/avatars/avatar14.png',
+    'http://localhost:3000/images/avatars/avatar15.png',
+    'http://localhost:3000/images/avatars/avatar16.png',
+    'http://localhost:3000/images/avatars/avatar17.png',
+    'http://localhost:3000/images/avatars/avatar18.png'
 ];
 
 // 随机获取一个默认头像

@@ -26,10 +26,11 @@ const allServices = {
     }
 }
 
+// 登录
 const userLogin = async (username, password) => {
     try {
         // ✅ 使用参数化查询防止SQL注入
-        const _sql = `select * from user where username=?`;
+        const _sql = `select * from users where username=?`;
         const users = await allServices.query(_sql, [username]);
 
         if (users.length === 0) {
@@ -37,7 +38,8 @@ const userLogin = async (username, password) => {
         }
 
         const user = users[0];
-        const isValid = await comparePassword(password, user.password);
+        const isValid = await comparePassword(password, user.password_hash);
+
 
         if (isValid) {
             return { success: true, user: user };
@@ -68,10 +70,11 @@ const userLogin = async (username, password) => {
     }
 };
 
+// 注册
 const userRegister = async (username, password, nickname) => {
     try {
         // 检查用户名是否已存在
-        const checkUser = 'select * from user where username=?'
+        const checkUser = 'select * from users where username=?'
         const user = await allServices.query(checkUser, [username])
         if (user.length > 0) {
             return { success: false, message: '用户名已存在' };
@@ -83,8 +86,8 @@ const userRegister = async (username, password, nickname) => {
         // 随机获取一个默认头像
         const avatar = getRandomAvatar();
 
-        const registerUser = 'insert into user (username, password, nickname, avatar, create_time) values (?, ?, ?, ?, ?)'
-        const result = await allServices.query(registerUser, [username, hashedPassword, nickname, avatar, new Date()]);
+        const registerUser = 'insert into users (username, password_hash, nickname, avatar) values (?, ?, ?, ?)'
+        const result = await allServices.query(registerUser, [username, hashedPassword, nickname, avatar]);
         if (result.affectedRows > 0) {
             return { success: true, message: '注册成功' };
         } else {
@@ -100,9 +103,34 @@ const userRegister = async (username, password, nickname) => {
     }
 }
 
+// 获取帖子列表
+const getPostList = async () => {
+    try {
+        const sql = `
+            SELECT 
+                p.*,
+                u.avatar,
+                u.nickname,
+                u.username
+            FROM posts p
+            LEFT JOIN users u ON p.user_id = u.id
+            WHERE p.visibility = 'public'
+            ORDER BY p.created_at DESC
+
+        `;
+        const res = await allServices.query(sql);
+        return res;
+    } catch (error) {
+        console.error('获取帖子列表错误详情:', error);
+        throw error;
+    }
+}
+
 
 module.exports = {
     allServices,
     userLogin,
     userRegister,
+    getPostList,
+
 };

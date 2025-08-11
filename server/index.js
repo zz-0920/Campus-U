@@ -5,6 +5,8 @@ const serve = require('koa-static');
 const path = require('path');
 const { bodyParser } = require('@koa/bodyparser');
 const userRouter = require('./router/user.js');
+const postRouter = require('./router/post.js');
+
 
 app.use(cors());
 
@@ -18,6 +20,7 @@ app.use(bodyParser({
 }));
 
 app.use(userRouter.routes(), userRouter.allowedMethods());
+app.use(postRouter.routes(), postRouter.allowedMethods());
 
 app.listen(3000, () => {
     console.log('server is running at port 3000');
