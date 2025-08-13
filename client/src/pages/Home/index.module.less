@@ -63,12 +63,12 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
 
-    .content-item-title {
+    .content-item-header {
       display: flex;
       align-items: center;
       margin-bottom: 16px;
 
-      .content-item-title-avatar {
+      .content-item-header-avatar {
         width: 48px;
         height: 48px;
         border-radius: 25%;
@@ -82,7 +82,7 @@
         }
       }
 
-      .content-item-title-name {
+      .content-item-header-name {
         flex: 1;
         font-size: 16px;
         font-weight: 600;
@@ -90,7 +90,7 @@
         margin: 0;
       }
 
-      .content-item-title-time {
+      .content-item-header-time {
         font-size: 14px;
         color: #999;
       }
@@ -158,52 +158,6 @@
   }
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-top: 1px solid #f0f0f0;
-  padding: 8px 0;
-  z-index: 100;
-
-  .footer-item {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-
-    .footer-item-icon {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: #666;
-      min-width: 60px;
-
-      &:hover,
-      &.active {
-        color: #1890ff;
-        background: rgba(24, 144, 255, 0.1);
-      }
-
-      svg {
-        width: 24px;
-        height: 24px;
-      }
-
-      p {
-        font-size: 12px;
-        margin: 0;
-        font-weight: 500;
-      }
-    }
-  }
-}
 
 // 响应式设计
 @media (max-width: 480px) {

@@ -4,6 +4,11 @@ import React, { Suspense } from 'react'
 const Login = React.lazy(() => import('@/pages/Login/index.jsx'))
 const Home = React.lazy(() => import('@/pages/Home/index.jsx'))
 const Register = React.lazy(() => import('@/pages/Register/index.jsx'))
+const PostDetail = React.lazy(() => import('@/pages/PostDetail/index.jsx'))
+const Discover = React.lazy(() => import('@/pages/Discover/index.jsx'))
+const Message = React.lazy(() => import('@/pages/Message/index.jsx'))
+const Profile = React.lazy(() => import('@/pages/Profile/index.jsx'))
+
 
 const Routers = [
     {
@@ -21,6 +26,22 @@ const Routers = [
     {
         path: '/register',
         element: <Register />
+    },
+    {
+        path: '/post/detail/:id',
+        element: <PostDetail />
+    },
+    {
+        path: '/discover',
+        element: <Discover />
+    },
+    {
+        path: '/message',
+        element: <Message />
+    },
+    {
+        path: '/profile/:id',
+        element: <Profile />
     }
 ]
 

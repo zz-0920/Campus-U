@@ -22,7 +22,7 @@ function verify() {
         
         // 提取实际的token（去掉'Bearer '前缀）
         const token = authHeader.replace('Bearer ', '');
-        
+        // console.log(token)
         try {
             const decoded = jwt.verify(token, 'zz是个大帅哥');
             // console.log(decoded);

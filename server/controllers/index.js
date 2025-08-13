@@ -126,11 +126,36 @@ const getPostList = async () => {
     }
 }
 
+// 获取帖子详情
+const getPostDetail = async (id, userId) => {
+    try {
+        const sql = `
+            SELECT 
+                p.*,
+                u.avatar,
+                u.nickname,
+                u.username
+            FROM posts p
+            LEFT JOIN users u ON p.user_id = u.id
+            WHERE p.id = ? AND p.visibility = 'public'
+        `;
+        const res = await allServices.query(sql, [id]);
+        
+        if (res.length === 0) {
+            return null; // 帖子不存在或不可见
+        }
+        
+        return res[0]; // 返回单个帖子详情
+    } catch (error) {
+        console.error('获取帖子详情错误:', error);
+        throw error;
+    }
+}
 
 module.exports = {
     allServices,
     userLogin,
     userRegister,
     getPostList,
-
+    getPostDetail,
 };
