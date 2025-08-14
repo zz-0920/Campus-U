@@ -66,9 +66,8 @@ axios.interceptors.response.use(
                         localStorage.removeItem('userInfo')
                         setTimeout(() => {
                             console.log('跳转登录页2')
-
                             window.location.href = '/login'
-                        }, 200000)
+                        }, 1500)
                     }
                     break
             }

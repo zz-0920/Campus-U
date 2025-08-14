@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { WapHomeO, ChatO, Contact } from '@react-vant/icons';
 import { createFromIconfontCN } from '@react-vant/icons';
 import { useNavigate, useLocation } from 'react-router-dom';

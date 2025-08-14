@@ -1,4 +1,4 @@
-import Tabbar from '@/components/Tabbar'
+import Tabbar from '@/components/Tabbar/Tabbar';
 
 
 export default function Profile() {

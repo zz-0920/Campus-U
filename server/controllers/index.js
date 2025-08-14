@@ -152,10 +152,119 @@ const getPostDetail = async (id, userId) => {
     }
 }
 
+// 获取帖子点赞信息
+const getPostLikesInfo = async (post_id, user_id = null) => {
+    try {
+        // 获取点赞总数
+        const countSql = `
+            SELECT COUNT(*) as like_count
+            FROM likes
+            WHERE post_id = ?
+        `;
+        const countRes = await allServices.query(countSql, [post_id]);
+        const like_count = countRes[0].like_count;
+        
+        let isLiked = false;
+        if (user_id) {
+            // 检查用户是否已点赞
+            const checkSql = `
+                SELECT COUNT(*) as like_exists
+                FROM likes
+                WHERE post_id = ? AND user_id = ?
+            `;
+            const checkRes = await allServices.query(checkSql, [post_id, user_id]);
+            isLiked = checkRes[0].like_exists > 0;
+        }
+        
+        return {
+            like_count,
+            isLiked
+        };
+    } catch (error) {
+        console.error('获取帖子点赞信息错误:', error);
+        throw error;
+    }
+}
+
+// 点赞/取消点赞帖子
+const togglePostLike = async (post_id, user_id) => {
+    try {
+        // 先检查当前点赞状态
+        const checkSql = `
+            SELECT COUNT(*) as like_exists
+            FROM likes
+            WHERE post_id = ? AND user_id = ?
+        `;
+        const checkRes = await allServices.query(checkSql, [post_id, user_id]);
+        const isLiked = checkRes[0].like_exists > 0;
+        
+        if (isLiked) {
+            // 如果已点赞，则取消点赞
+            const sql = `
+                DELETE FROM likes
+                WHERE post_id = ? AND user_id = ?
+            `;
+            const res = await allServices.query(sql, [post_id, user_id]);
+            return { success: res.affectedRows > 0, action: 'unliked' };
+        } else {
+            // 如果未点赞，则添加点赞
+            const sql = `
+                INSERT INTO likes (post_id, user_id, created_at)
+                VALUES (?, ?, NOW())
+            `;
+            const res = await allServices.query(sql, [post_id, user_id]);
+            return { success: res.affectedRows > 0, action: 'liked' };
+        }
+    } catch (error) {
+        console.error('切换点赞状态错误:', error);
+        throw error;
+    }
+}
+
+
+// 获取帖子评论数和评论列表
+const getPostComments = async (id) => {
+    try {
+        // 获取评论数量
+        const countSql = `
+            SELECT COUNT(*) as comment_count
+            FROM comments
+            WHERE post_id = ?
+        `;
+        const countRes = await allServices.query(countSql, [id]);
+        
+        // 获取评论列表（包含用户信息）
+        const commentsSql = `
+            SELECT 
+                c.*,
+                u.username,
+                u.nickname,
+                u.avatar
+            FROM comments c
+            LEFT JOIN users u ON c.user_id = u.id
+            WHERE c.post_id = ?
+            ORDER BY c.created_at DESC
+        `;
+        const commentsRes = await allServices.query(commentsSql, [id]);
+        
+        return {
+            comment_count: countRes[0].comment_count,
+            comments: commentsRes
+        };
+    } catch (error) {
+        console.error('获取帖子评论错误:', error);
+        throw error;
+    }
+}
+
+
 module.exports = {
     allServices,
     userLogin,
     userRegister,
     getPostList,
     getPostDetail,
+    getPostLikesInfo,
+    getPostComments,
+    togglePostLike,
 };

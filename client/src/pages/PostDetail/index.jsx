@@ -17,13 +17,20 @@ export default function PostDetail() {
   const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false)
   const [likeCount, setLikeCount] = useState(0)
+  const [comments, setComments] = useState([])
+  const [showCommentModal, setShowCommentModal] = useState(false)
+
 
   const fetchPost = async () => {
     try {
       setLoading(true)
-      const res = await axios.get(`/post/detail/${id}`)
-      setPost(res.data)
-      setLikeCount(res.data.like_count || 0)
+      const PostDetail = await axios.get(`/post/detail/${id}`)
+      const like_info = await axios.get(`/post/likes/${id}`)
+      const comment = await axios.get(`/post/comments/${id}`)
+      setPost(PostDetail.data)
+      setLikeCount(like_info.data.like_count || 0)
+      setLiked(like_info.data.isLiked || false)
+      setComments(comment.data)
     } catch (error) {
       console.log(error)
     } finally {
@@ -35,9 +42,33 @@ export default function PostDetail() {
     navigate(-1)
   }
 
-  const handleLike = () => {
-    setLiked(!liked)
-    setLikeCount(prev => liked ? prev - 1 : prev + 1)
+  const handleLike = async () => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      const response = await axios.post(`/post/likes`, {
+        post_id: id,
+        user_id: userInfo.id
+      })
+      
+      // 根据后端返回的action更新状态
+      if (response.data.action === 'liked') {
+        setLiked(true)
+        setLikeCount(prev => prev + 1)
+      } else if (response.data.action === 'unliked') {
+        setLiked(false)
+        setLikeCount(prev => prev - 1)
+      }
+    } catch (error) {
+      console.log(error)
+      // 如果请求失败，恢复之前的状态
+      if (liked) {
+        setLiked(false)
+        setLikeCount(prev => prev - 1)
+      } else {
+        setLiked(true)
+        setLikeCount(prev => prev + 1)
+      }
+    }
   }
 
   const handleShare = () => {
@@ -47,7 +78,13 @@ export default function PostDetail() {
 
   const handleComment = () => {
     // 评论功能
-    console.log('评论动态')
+    setShowCommentModal(true)
+  }
+
+  const handleCommentReply = (commentId, nickname) => {
+    // 回复评论功能
+    console.log('回复评论:', commentId, nickname)
+    setShowCommentModal(true)
   }
 
   useEffect(() => {
@@ -107,7 +144,7 @@ export default function PostDetail() {
             <span>{likeCount} 次点赞</span>
           </div>
           <div className={styles['stats-item']}>
-            <span>128 次浏览</span>
+            <span>{comments.comment_count} 评论</span>
           </div>
         </div>
       </div>
@@ -131,12 +168,54 @@ export default function PostDetail() {
       {/* 评论区域 */}
       <div className={styles['comments-section']}>
         <div className={styles['comments-header']}>
-          <h3>评论</h3>
+          <h3>评论 {comments.comment_count || 0}</h3>
         </div>
         <div className={styles['comments-list']}>
-          {/* 这里可以添加评论列表 */}
-          <div className={styles['no-comments']}>
-            <p>暂无评论，快来抢沙发吧~</p>
+          {comments.comments && comments.comments.length > 0 ? (
+            comments.comments.map((item) => (
+              <div className={styles['comment-item']} key={item.id}>
+                <div className={styles['comment-avatar']}>
+                  <img src={item.avatar} alt="" />
+                </div>
+                <div className={styles['comment-content']}>
+                  <div className={styles['comment-main']}>
+                    <div className={styles['comment-user']}>
+                      <span className={styles['comment-nickname']}>{item.nickname}</span>
+                      <span className={styles['comment-time']}>{formatTime(item.created_at)}</span>
+                    </div>
+                    <p className={styles['comment-text']}>{item.content}</p>
+                    <div className={styles['comment-actions']}>
+                      <div className={styles['comment-action']} onClick={() => handleCommentReply(item.id, item.nickname)}>
+                        <IconFont name="icon-pinglun" style={{fontSize: '14px', color: '#999'}} />
+                        <span>回复</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className={styles['no-comments']}>
+              <div className={styles['no-comments-icon']}>
+                <IconFont name="icon-pinglun" style={{fontSize: '48px', color: '#ddd'}} />
+              </div>
+              <p>还没有评论，快来抢沙发吧~</p>
+            </div>
+          )}
+        </div>
+        
+        {/* 评论输入框 */}
+        <div className={styles['comment-input-section']}>
+          <div className={styles['comment-input-wrapper']}>
+            <input 
+              type="text" 
+              placeholder="写评论..." 
+              className={styles['comment-input']}
+              onFocus={() => setShowCommentModal(true)}
+            />
+            <div className={styles['comment-emoji']}>
+              <IconFont name="icon-biaoqing" style={{fontSize: '20px', color: '#999'}} />
+            </div>
           </div>
         </div>
       </div>

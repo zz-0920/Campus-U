@@ -5,7 +5,7 @@ import { createFromIconfontCN } from '@react-vant/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatTime } from '@/utils/index.js'
-import Tabbar from '@/components/Tabbar';
+import Tabbar from '@/components/Tabbar/Tabbar';
 
 const IconFont = createFromIconfontCN(
   '//at.alicdn.com/t/c/font_4993182_m91v3zvdngo.js'
