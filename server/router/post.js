@@ -1,9 +1,13 @@
 const Router = require('@koa/router');
 const router = new Router();
-const { getPostList, getPostDetail, getPostLikesInfo, getPostComments, togglePostLike } = require('../controllers/index.js');
-
-
-
+const {
+    getPostList,
+    getPostDetail,
+    getPostLikesInfo,
+    getPostComments,
+    togglePostLike,
+    addComment
+} = require('../controllers/index.js');
 const { verify } = require('../utils/jwt.js');
 
 router.prefix('/post')
@@ -26,7 +30,6 @@ router.get('/list', verify(), async (ctx) => {
             data: {}
         }
     }
-    
 })
 
 // 获取帖子详情
@@ -117,5 +120,28 @@ router.get('/comments/:id', verify(), async (ctx) => {
     }
 })
 
+// 评论
+router.post('/comments', verify(), async (ctx) => {
+    try {
+        const { postId, content } = ctx.request.body;
+        const userId = ctx.userId; // 从JWT中间件获取用户ID
+
+        const newComment = await addComment(postId, userId, content);
+
+        ctx.body = {
+            code: '1',
+            msg: '评论成功',
+            data: newComment
+        };
+    } catch (error) {
+        console.error('评论失败:', error);
+        ctx.status = 500;
+        ctx.body = {
+            code: '0',
+            msg: '评论失败',
+            error: error.message
+        };
+    }
+});
 
 module.exports = router;

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatTime } from '@/utils/index.js'
 import Tabbar from '@/components/Tabbar/Tabbar';
+import tabbarStyles from '@/components/Tabbar/Tabbar.module.less';
 
 const IconFont = createFromIconfontCN(
   '//at.alicdn.com/t/c/font_4993182_m91v3zvdngo.js'
@@ -31,7 +32,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div>
+    <div className={tabbarStyles['page-with-tabbar']}>
       <div className={styles['header']}>
         <div className={styles['title']}>
           校园U+
@@ -69,7 +70,7 @@ export default function Home() {
                   )
                 }
               </div>
-              <div className={styles['content-item-footer']}>
+              {/* <div className={styles['content-item-footer']}>
                 <div className={styles['content-item-footer-item']}>
                   <div>
                     <LikeO />
@@ -84,7 +85,7 @@ export default function Home() {
                     <p>分享</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           ))
         }

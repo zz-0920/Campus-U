@@ -5,6 +5,7 @@ import axios from '@/api/axios'
 import { formatTime } from '@/utils/index.js'
 import { ArrowLeft, LikeO, ShareO, MoreO } from '@react-vant/icons'
 import { createFromIconfontCN } from '@react-vant/icons'
+import CommentModal from '@/components/CommentModal'
 
 const IconFont = createFromIconfontCN(
   '//at.alicdn.com/t/c/font_4993182_m91v3zvdngo.js'
@@ -185,10 +186,6 @@ export default function PostDetail() {
                     </div>
                     <p className={styles['comment-text']}>{item.content}</p>
                     <div className={styles['comment-actions']}>
-                      <div className={styles['comment-action']} onClick={() => handleCommentReply(item.id, item.nickname)}>
-                        <IconFont name="icon-pinglun" style={{fontSize: '14px', color: '#999'}} />
-                        <span>回复</span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -213,12 +210,27 @@ export default function PostDetail() {
               className={styles['comment-input']}
               onFocus={() => setShowCommentModal(true)}
             />
-            <div className={styles['comment-emoji']}>
-              <IconFont name="icon-biaoqing" style={{fontSize: '20px', color: '#999'}} />
-            </div>
           </div>
         </div>
       </div>
+      
+      {/* 添加评论弹出框 */}
+      {showCommentModal && (
+        <CommentModal 
+          visible={showCommentModal}
+          onClose={() => setShowCommentModal(false)}
+          postId={id}
+          onCommentSubmit={(newComment) => {
+            // 处理新评论提交
+            setComments(prev => ({
+              ...prev,
+              comments: [...(prev.comments || []), newComment],
+              comment_count: (prev.comment_count || 0) + 1
+            }))
+            setShowCommentModal(false)
+          }}
+        />
+      )}
     </div>
   )
 }

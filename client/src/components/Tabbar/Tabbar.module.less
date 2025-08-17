@@ -1,4 +1,9 @@
 // Tabbar组件样式
+// 为使用Tabbar的页面添加底部间距
+.page-with-tabbar {
+  padding-bottom: 60px;
+}
+
 .footer {
   position: fixed;
   bottom: 0;
@@ -48,6 +53,10 @@
 
 // 响应式设计
 @media (max-width: 480px) {
+  .page-with-tabbar {
+    padding-bottom: 50px;
+  }
+
   .footer {
     padding: 6px 0;
 

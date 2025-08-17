@@ -1,0 +1,317 @@
+// CommentModal 组件样式
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 16px 16px 0 0;
+  padding: 0;
+  animation: slideUp 0.3s ease-out;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// 弹窗头部
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #e8e8e8;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      color: #666;
+    }
+  }
+}
+
+// 评论输入区域
+.comment-input-area {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  .comment-textarea {
+    width: 100%;
+    min-height: 120px;
+    max-height: 200px;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background: #fafafa;
+    resize: vertical;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+
+    &:focus {
+      border-color: #1890ff;
+      background: #fff;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  .char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+  }
+}
+
+// 底部操作区域
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+
+  .cancel-btn {
+    flex: 1;
+    height: 44px;
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    color: #666;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #1890ff;
+      color: #1890ff;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .submit-btn {
+    flex: 2;
+    height: 44px;
+    border: none;
+    background: #1890ff;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #40a9ff;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &.disabled {
+      background: #d9d9d9;
+      color: #999;
+      cursor: not-allowed;
+      transform: none;
+
+      &:hover {
+        background: #d9d9d9;
+      }
+    }
+  }
+}
+
+// 动画效果
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .modal-content {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .modal-header {
+    padding: 14px 16px;
+
+    h3 {
+      font-size: 16px;
+    }
+
+    .close-btn {
+      width: 28px;
+      height: 28px;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  .comment-input-area {
+    padding: 16px;
+
+    .comment-textarea {
+      font-size: 14px;
+      min-height: 100px;
+      padding: 10px;
+    }
+
+    .char-count {
+      font-size: 11px;
+    }
+  }
+
+  .modal-footer {
+    padding: 12px 16px;
+    gap: 10px;
+
+    .cancel-btn,
+    .submit-btn {
+      height: 40px;
+      font-size: 14px;
+    }
+  }
+}
+
+// 深色模式支持
+@media (prefers-color-scheme: dark) {
+  .modal-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .modal-content {
+    background: #2d2d2d;
+  }
+
+  .modal-header {
+    border-bottom-color: #404040;
+
+    h3 {
+      color: #fff;
+    }
+
+    .close-btn {
+      background: #404040;
+
+      &:hover {
+        background: #555;
+      }
+
+      svg {
+        color: #ccc;
+      }
+    }
+  }
+
+  .comment-input-area {
+    .comment-textarea {
+      background: #404040;
+      border-color: #555;
+      color: #fff;
+
+      &:focus {
+        background: #2d2d2d;
+        border-color: #1890ff;
+      }
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+
+    .char-count {
+      color: #999;
+    }
+  }
+
+  .modal-footer {
+    border-top-color: #404040;
+
+    .cancel-btn {
+      background: #404040;
+      border-color: #555;
+      color: #ccc;
+
+      &:hover {
+        border-color: #1890ff;
+        color: #1890ff;
+      }
+    }
+
+    .submit-btn {
+      &.disabled {
+        background: #555;
+        color: #999;
+      }
+    }
+  }
+}

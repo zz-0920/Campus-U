@@ -257,6 +257,33 @@ const getPostComments = async (id) => {
     }
 }
 
+// 添加评论
+const addComment = async (postId, userId, content) => {
+  try {
+    const sql = `
+      INSERT INTO comments (post_id, user_id, content, created_at)
+      VALUES (?, ?, ?, NOW())
+    `
+    const result = await allServices.query(sql, [postId, userId, content])
+    
+    // 获取刚插入的评论详情
+    const commentSql = `
+      SELECT 
+        c.*,
+        u.nickname,
+        u.avatar
+      FROM comments c
+      LEFT JOIN users u ON c.user_id = u.id
+      WHERE c.id = ?
+    `
+    const commentResult = await allServices.query(commentSql, [result.insertId])
+    
+    return commentResult[0]
+  } catch (error) {
+    console.error('添加评论错误:', error)
+    throw error
+  }
+}
 
 module.exports = {
     allServices,
@@ -267,4 +294,6 @@ module.exports = {
     getPostLikesInfo,
     getPostComments,
     togglePostLike,
+    addComment,
+
 };
