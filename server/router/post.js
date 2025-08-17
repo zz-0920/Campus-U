@@ -1,14 +1,52 @@
 const Router = require('@koa/router');
 const router = new Router();
+const multer = require('@koa/multer');
+const path = require('path');
+const fs = require('fs');
 const {
     getPostList,
     getPostDetail,
     getPostLikesInfo,
     getPostComments,
     togglePostLike,
-    addComment
+    addComment,
+    publishPost
 } = require('../controllers/index.js');
 const { verify } = require('../utils/jwt.js');
+
+// 配置文件上传
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '../public/uploads');
+        // 确保上传目录存在
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        // 生成唯一文件名
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, 'post-' + uniqueSuffix + ext);
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB
+    },
+    fileFilter: function (req, file, cb) {
+        // 检查文件类型
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('只支持 JPG、PNG、GIF 格式的图片'));
+        }
+    }
+});
 
 router.prefix('/post')
 
@@ -140,6 +178,91 @@ router.post('/comments', verify(), async (ctx) => {
             code: '0',
             msg: '评论失败',
             error: error.message
+        };
+    }
+});
+
+// 发布帖子
+router.post('/publish', verify(), upload.single('image'), async (ctx) => {
+    try {
+        const { content } = ctx.request.body;
+        const userId = ctx.userId;
+        
+        // 验证内容
+        if (!content || !content.trim()) {
+            ctx.status = 400;
+            ctx.body = {
+                code: '0',
+                msg: '发布内容不能为空',
+                data: {}
+            };
+            return;
+        }
+        
+        if (content.trim().length < 5) {
+            ctx.status = 400;
+            ctx.body = {
+                code: '0',
+                msg: '发布内容至少需要5个字符',
+                data: {}
+            };
+            return;
+        }
+        
+        if (content.trim().length > 500) {
+            ctx.status = 400;
+            ctx.body = {
+                code: '0',
+                msg: '发布内容不能超过500个字符',
+                data: {}
+            };
+            return;
+        }
+        
+        // 处理图片URL
+        let imageUrl = null;
+        if (ctx.file) {
+            imageUrl = `/uploads/${ctx.file.filename}`;
+        }
+        
+        // 获取位置信息（可选）
+        const { location = '' } = ctx.request.body;
+        
+        const result = await publishPost(userId, content.trim(), imageUrl, location);
+        
+        if (result.success) {
+            ctx.body = {
+                code: '1',
+                msg: '发布成功',
+                data: result.post
+            };
+        } else {
+            ctx.status = 500;
+            ctx.body = {
+                code: '0',
+                msg: '发布失败',
+                data: {}
+            };
+        }
+    } catch (error) {
+        console.error('发布帖子错误:', error);
+        
+        // 如果是文件上传错误
+        if (error.message.includes('只支持')) {
+            ctx.status = 400;
+            ctx.body = {
+                code: '0',
+                msg: error.message,
+                data: {}
+            };
+            return;
+        }
+        
+        ctx.status = 500;
+        ctx.body = {
+            code: '0',
+            msg: '服务器错误，请稍后重试',
+            data: {}
         };
     }
 });

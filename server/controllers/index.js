@@ -285,6 +285,152 @@ const addComment = async (postId, userId, content) => {
   }
 }
 
+// 获取用户的聊天列表
+const getChatList = async (userId) => {
+    try {
+        const sql = `
+            SELECT 
+                latest_messages.chat_user_id,
+                latest_messages.nickname,
+                latest_messages.avatar,
+                latest_messages.last_message,
+                latest_messages.last_message_time,
+                COALESCE(unread_counts.unread_count, 0) as unread_count
+            FROM (
+                SELECT 
+                    CASE 
+                        WHEN m.sender_id = ? THEN m.receiver_id
+                        ELSE m.sender_id
+                    END as chat_user_id,
+                    u.nickname,
+                    u.avatar,
+                    m.content as last_message,
+                    m.created_at as last_message_time,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY CASE 
+                            WHEN m.sender_id = ? THEN m.receiver_id
+                            ELSE m.sender_id
+                        END 
+                        ORDER BY m.created_at DESC
+                    ) as rn
+                FROM messages m
+                LEFT JOIN users u ON (
+                    CASE 
+                        WHEN m.sender_id = ? THEN u.id = m.receiver_id
+                        ELSE u.id = m.sender_id
+                    END
+                )
+                WHERE m.sender_id = ? OR m.receiver_id = ?
+            ) latest_messages
+            LEFT JOIN (
+                SELECT 
+                    sender_id as chat_user_id,
+                    COUNT(*) as unread_count
+                FROM messages 
+                WHERE receiver_id = ? AND is_read = 0
+                GROUP BY sender_id
+            ) unread_counts ON latest_messages.chat_user_id = unread_counts.chat_user_id
+            WHERE latest_messages.rn = 1 AND latest_messages.chat_user_id IS NOT NULL
+            ORDER BY latest_messages.last_message_time DESC
+        `;
+        const res = await allServices.query(sql, [userId, userId, userId, userId, userId, userId]);
+        
+        return res;
+    } catch (error) {
+        console.error('获取聊天列表错误:', error);
+        throw error;
+    }
+}
+
+// 获取两个用户之间的聊天记录
+const getChatMessages = async (userId1, userId2) => {
+    try {
+        const sql = `
+            SELECT 
+                m.*,
+                sender.nickname as sender_nickname,
+                sender.avatar as sender_avatar,
+                receiver.nickname as receiver_nickname,
+                receiver.avatar as receiver_avatar
+            FROM messages m
+            LEFT JOIN users sender ON m.sender_id = sender.id
+            LEFT JOIN users receiver ON m.receiver_id = receiver.id
+            WHERE (m.sender_id = ? AND m.receiver_id = ?) 
+               OR (m.sender_id = ? AND m.receiver_id = ?)
+            ORDER BY m.created_at ASC
+        `;
+        const res = await allServices.query(sql, [userId1, userId2, userId2, userId1]);
+        return res;
+    } catch (error) {
+        console.error('获取聊天记录错误:', error);
+        throw error;
+    }
+}
+
+// 发送消息
+const sendMessage = async (senderId, receiverId, content, messageType = 'text') => {
+    try {
+        const sql = `
+            INSERT INTO messages (sender_id, receiver_id, content, message_type, is_read, created_at)
+            VALUES (?, ?, ?, ?, 0, NOW())
+        `;
+        const result = await allServices.query(sql, [senderId, receiverId, content, messageType]);
+        
+        // 获取刚发送的消息详情
+        const selectSql = `
+            SELECT 
+                m.*,
+                sender.nickname as sender_nickname,
+                sender.avatar as sender_avatar,
+                receiver.nickname as receiver_nickname,
+                receiver.avatar as receiver_avatar
+            FROM messages m
+            LEFT JOIN users sender ON m.sender_id = sender.id
+            LEFT JOIN users receiver ON m.receiver_id = receiver.id
+            WHERE m.id = ?
+        `;
+        const newMessage = await allServices.query(selectSql, [result.insertId]);
+        
+        return newMessage[0];
+    } catch (error) {
+        console.error('发送消息错误:', error);
+        throw error;
+    }
+}
+
+// 标记消息为已读
+const markMessagesAsRead = async (userId, chatUserId) => {
+    try {
+        const sql = `
+            UPDATE messages 
+            SET is_read = 1 
+            WHERE receiver_id = ? AND sender_id = ? AND is_read = 0
+        `;
+        const result = await allServices.query(sql, [userId, chatUserId]);
+        return result;
+    } catch (error) {
+        console.error('标记消息已读错误:', error);
+        throw error;
+    }
+}
+
+// 发布帖子
+const publishPost = async (userId, content, imageUrl = null, location = '') => {
+    try {
+        const _sql = `INSERT INTO posts (user_id, content, image_url, location, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())`;
+        const result = await allServices.query(_sql, [userId, content, imageUrl, location]);
+        
+        // 获取刚插入的帖子详情
+        const postId = result.insertId;
+        const postDetail = await getPostDetail(postId, userId);
+        
+        return { success: true, post: postDetail };
+    } catch (error) {
+        console.error('发布帖子错误:', error);
+        throw error;
+    }
+}
+
 module.exports = {
     allServices,
     userLogin,
@@ -295,5 +441,9 @@ module.exports = {
     getPostComments,
     togglePostLike,
     addComment,
-
+    getChatList,
+    getChatMessages,
+    sendMessage,
+    markMessagesAsRead,
+    publishPost,
 };

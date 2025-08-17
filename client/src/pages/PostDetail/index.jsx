@@ -135,7 +135,7 @@ export default function PostDetail() {
         {/* 动态图片 */}
         {post.image_url && (
           <div className={styles['post-image']}>
-            <img src={post.image_url} alt="" />
+            <img src={`http://localhost:3000${post.image_url}`} alt="" />
           </div>
         )}
 

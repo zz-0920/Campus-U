@@ -7,6 +7,8 @@ const Register = React.lazy(() => import('@/pages/Register/index.jsx'))
 const PostDetail = React.lazy(() => import('@/pages/PostDetail/index.jsx'))
 const Discover = React.lazy(() => import('@/pages/Discover/index.jsx'))
 const Message = React.lazy(() => import('@/pages/Message/index.jsx'))
+const MessageDetail = React.lazy(() => import('@/pages/MessageDetail/index.jsx'))
+const Publish = React.lazy(() => import('@/pages/Publish/index.jsx'))
 const Profile = React.lazy(() => import('@/pages/Profile/index.jsx'))
 
 
@@ -38,6 +40,14 @@ const Routers = [
     {
         path: '/message',
         element: <Message />
+    },
+    {
+        path: '/message/:userId',
+        element: <MessageDetail />
+    },
+    {
+        path: '/publish',
+        element: <Publish />
     },
     {
         path: '/profile/:id',

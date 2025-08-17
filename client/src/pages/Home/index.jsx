@@ -1,5 +1,5 @@
 import styles from './index.module.less';
-import { Search, LikeO, ShareO } from '@react-vant/icons';
+import { Search, Plus } from '@react-vant/icons';
 import axios from '@/api/axios';
 import { createFromIconfontCN } from '@react-vant/icons';
 import { useEffect, useState } from 'react';
@@ -65,7 +65,7 @@ export default function Home() {
                 {
                   item.image_url && (
                     <div className={styles['content-item-content-image']}>
-                      <img src={item.image_url} alt="" />
+                      <img src={`http://localhost:3000${item.image_url}`} alt="" />
                     </div>
                   )
                 }
@@ -91,6 +91,14 @@ export default function Home() {
         }
       </div>
       <Tabbar />
+      
+      {/* 浮动发布按钮 */}
+      <div 
+        className={styles['floating-publish-btn']} 
+        onClick={() => navigate('/publish')}
+      >
+        <Plus size={24} />
+      </div>
     </div>
   )
 }

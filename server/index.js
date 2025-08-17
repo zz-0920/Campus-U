@@ -6,6 +6,7 @@ const path = require('path');
 const { bodyParser } = require('@koa/bodyparser');
 const userRouter = require('./router/user.js');
 const postRouter = require('./router/post.js');
+const messageRouter = require('./router/message.js');
 
 
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(bodyParser({
 
 app.use(userRouter.routes(), userRouter.allowedMethods());
 app.use(postRouter.routes(), postRouter.allowedMethods());
+app.use(messageRouter.routes(), messageRouter.allowedMethods());
 
 app.listen(3000, () => {
     console.log('server is running at port 3000');

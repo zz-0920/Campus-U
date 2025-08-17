@@ -156,6 +156,39 @@
   }
 }
 
+// 浮动发布按钮
+.floating-publish-btn {
+  position: fixed;
+  bottom: 80px; // 避免与底部导航栏重叠
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background: #1989fa;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(25, 137, 250, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  
+  &:hover {
+    background: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(25, 137, 250, 0.5);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(25, 137, 250, 0.3);
+  }
+  
+  svg {
+    color: white;
+  }
+}
+
 
 // 响应式设计
 @media (max-width: 480px) {
