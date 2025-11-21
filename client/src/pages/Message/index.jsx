@@ -111,7 +111,7 @@ export default function Message() {
               onClick={() => handleChatClick(chat.chat_user_id)}
             >
               <div className={styles.avatar}>
-                <img 
+                <img
                   src={chat.avatar || 'https://img01.yzcdn.cn/vant/cat.jpeg'} 
                   alt={chat.nickname} 
                 />

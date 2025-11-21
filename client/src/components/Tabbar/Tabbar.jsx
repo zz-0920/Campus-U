@@ -33,7 +33,14 @@ export default function Tabbar() {
         navigate('/message');
         break;
       case 'profile':
-        navigate('/profile');
+        // 获取当前用户ID并导航到个人资料页面
+        const userInfo = localStorage.getItem('userInfo');
+        if (userInfo) {
+          const user = JSON.parse(userInfo);
+          navigate(`/profile/${user.id}`);
+        } else {
+          navigate('/login');
+        }
         break;
       default:
         break;

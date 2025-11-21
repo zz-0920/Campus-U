@@ -1,0 +1,217 @@
+/* 微信风格的编辑资料页面 */
+.editProfile {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 头部导航 */
+.header {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.backButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #191919;
+  transition: background-color 0.2s;
+  border-radius: 6px;
+}
+
+.backButton:active {
+  background-color: #f0f0f0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #191919;
+  text-align: center;
+}
+
+.placeholder {
+  width: 32px;
+  height: 32px;
+}
+
+/* 内容区域 */
+.content {
+  flex: 1;
+  padding: 0;
+}
+
+.form {
+  height: 100%;
+}
+
+/* 表单区块 */
+.formSection {
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 16px;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #191919;
+  margin-bottom: 12px;
+}
+
+/* 头像上传区域 */
+.avatarSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.avatarUploader {
+  border: 2px dashed #e0e0e0;
+  border-radius: 25%;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: #07c160;
+  }
+}
+
+.avatarPreview {
+  width: 80px;
+  height: 80px;
+  border-radius: 25%;
+  object-fit: cover;
+}
+
+.uploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #999;
+  font-size: 14px;
+}
+
+
+
+/* 输入框样式 */
+.input {
+  border: none;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: #191919;
+  
+  &::placeholder {
+    color: #999;
+  }
+  
+  &:focus {
+    background-color: #ffffff;
+    border: 1px solid #07c160;
+    outline: none;
+  }
+}
+
+.textarea {
+  border: none;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: #191919;
+  resize: none;
+  
+  &::placeholder {
+    color: #999;
+  }
+  
+  &:focus {
+    background-color: #ffffff;
+    border: 1px solid #07c160;
+    outline: none;
+  }
+}
+
+/* 保存按钮区域 */
+.saveSection {
+  background-color: #ffffff;
+  padding: 20px 16px;
+  border-top: 1px solid #e5e5e5;
+  margin-top: auto;
+}
+
+.saveButton {
+  background-color: #07c160;
+  border: none;
+  border-radius: 8px;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  
+  &:active {
+    background-color: #06ad56;
+  }
+  
+  &:disabled {
+    background-color: #c8c8c8;
+    color: #ffffff;
+  }
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #888888;
+  font-size: 16px;
+  background-color: #f7f7f7;
+}
+
+/* 表单项样式重置 */
+:global {
+  .rv-form-item {
+    margin-bottom: 0;
+    
+    .rv-form-item__control {
+      .rv-form-item__control-input {
+        .rv-field__control {
+          padding: 0;
+          
+          .rv-field__body {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+  
+
+}

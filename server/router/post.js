@@ -10,7 +10,9 @@ const {
     getPostComments,
     togglePostLike,
     addComment,
-    publishPost
+    publishPost,
+    getUserPosts,
+    getUserFavorites
 } = require('../controllers/index.js');
 const { verify } = require('../utils/jwt.js');
 
@@ -263,6 +265,47 @@ router.post('/publish', verify(), upload.single('image'), async (ctx) => {
             code: '0',
             msg: '服务器错误，请稍后重试',
             data: {}
+        };
+    }
+});
+
+// 获取用户的帖子
+router.get('/user/:userId', verify(), async (ctx) => {
+    try {
+        const { userId } = ctx.params;
+        const posts = await getUserPosts(userId);
+        ctx.body = {
+            code: '1',
+            msg: '获取用户帖子成功',
+            data: posts
+        };
+    } catch (error) {
+        console.error('获取用户帖子失败:', error);
+        ctx.body = {
+            code: '0',
+            msg: '获取用户帖子失败',
+            data: []
+        };
+    }
+});
+
+// 获取用户收藏的帖子
+router.get('/favorites', verify(), async (ctx) => {
+    try {
+        const userId = ctx.userId; // 从JWT中间件获取用户ID
+        
+        const favorites = await getUserFavorites(userId);
+        ctx.body = {
+            code: '1',
+            msg: '获取用户点赞成功',
+            data: favorites
+        };
+    } catch (error) {
+        console.error('获取用户点赞失败:', error);
+        ctx.body = {
+            code: '0',
+            msg: '获取用户点赞失败',
+            data: []
         };
     }
 });

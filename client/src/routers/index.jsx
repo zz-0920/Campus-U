@@ -10,6 +10,10 @@ const Message = React.lazy(() => import('@/pages/Message/index.jsx'))
 const MessageDetail = React.lazy(() => import('@/pages/MessageDetail/index.jsx'))
 const Publish = React.lazy(() => import('@/pages/Publish/index.jsx'))
 const Profile = React.lazy(() => import('@/pages/Profile/index.jsx'))
+const EditProfile = React.lazy(() => import('@/pages/EditProfile/index.jsx'))
+const MyPosts = React.lazy(() => import('@/pages/MyPosts/index.jsx'))
+const MyFavorites = React.lazy(() => import('@/pages/MyFavorites/index.jsx'))
+const Setting = React.lazy(() => import('@/pages/Setting/index.jsx'))
 
 
 const Routers = [
@@ -52,6 +56,22 @@ const Routers = [
     {
         path: '/profile/:id',
         element: <Profile />
+    },
+    {
+        path: '/edit-profile',
+        element: <EditProfile />
+    },
+    {
+        path: '/my-posts/:userId',
+        element: <MyPosts />
+    },
+    {
+        path: '/my-favorites',
+        element: <MyFavorites />
+    },
+    {
+        path: '/setting',
+        element: <Setting />
     }
 ]
 

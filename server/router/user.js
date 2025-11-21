@@ -2,7 +2,6 @@ const Router = require('@koa/router');
 const router = new Router();
 const { userLogin, userRegister } = require('../controllers/index.js');
 const { sign, verify } = require('../utils/jwt.js');
-const { escape } = require('../utils/security.js');
 const jwt = require('jsonwebtoken');
 
 
@@ -79,6 +78,124 @@ router.post('/login', async (ctx) => {
             errorType: errorType,
             data: {}
         };
+    }
+})
+
+// 更新用户信息
+router.put('/update', async (ctx) => {
+    try {
+        const { authorization } = ctx.headers;
+        if (!authorization) {
+            ctx.status = 401;
+            ctx.body = {
+                code: '0',
+                msg: '未授权访问',
+                data: {}
+            };
+            return;
+        }
+
+        const token = authorization.replace('Bearer ', '');
+        const decoded = jwt.verify(token, 'zz是个大帅哥');
+        const userId = decoded.id;
+
+        const {
+            username,
+            nickname,
+            email,
+            phone,
+            gender,
+            school,
+            major,
+            grade,
+            bio,
+            avatar
+        } = ctx.request.body;
+
+        // 输入验证
+        if (username && username.length > 50) {
+            ctx.body = {
+                code: '0',
+                msg: '用户名不能超过50个字符',
+                data: {}
+            };
+            return;
+        }
+
+        if (nickname && nickname.length > 100) {
+            ctx.body = {
+                code: '0',
+                msg: '昵称不能超过100个字符',
+                data: {}
+            };
+            return;
+        }
+
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            ctx.body = {
+                code: '0',
+                msg: '邮箱格式不正确',
+                data: {}
+            };
+            return;
+        }
+
+        if (phone && !/^1[3-9]\d{9}$/.test(phone)) {
+            ctx.body = {
+                code: '0',
+                msg: '手机号格式不正确',
+                data: {}
+            };
+            return;
+        }
+
+        // 准备更新数据
+        const updateData = {
+            username,
+            nickname,
+            email,
+            phone,
+            gender,
+            school,
+            major,
+            grade,
+            bio,
+            avatar
+        };
+        
+        // 调用控制器函数处理更新
+        const { userUpdateProfile } = require('../controllers/index.js');
+        const result = await userUpdateProfile(userId, updateData);
+
+        if (result.success) {
+            ctx.body = {
+                code: '1',
+                msg: result.message,
+                data: result.data
+            };
+        } else {
+            ctx.body = {
+                code: '0',
+                msg: result.message,
+                data: {}
+            };
+        }
+    } catch (error) {
+        console.error('更新用户信息错误:', error);
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            ctx.status = 401;
+            ctx.body = {
+                code: '0',
+                msg: '令牌无效或已过期',
+                data: {}
+            };
+        } else {
+            ctx.body = {
+                code: '-1',
+                msg: '服务器异常',
+                data: {}
+            };
+        }
     }
 });
 

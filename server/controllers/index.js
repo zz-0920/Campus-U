@@ -431,10 +431,119 @@ const publishPost = async (userId, content, imageUrl = null, location = '') => {
     }
 }
 
+// 获取用户的帖子列表
+const getUserPosts = async (userId) => {
+    try {
+        const _sql = `
+            SELECT 
+                p.id,
+                p.content,
+                p.image_url,
+                p.location,
+                p.created_at,
+                p.updated_at,
+                u.id as user_id,
+                u.nickname,
+                u.avatar
+            FROM posts p
+            LEFT JOIN users u ON p.user_id = u.id
+            WHERE p.user_id = ?
+            ORDER BY p.created_at DESC
+        `;
+        const posts = await allServices.query(_sql, [userId]);
+        return posts;
+    } catch (error) {
+        console.error('获取用户帖子错误:', error);
+        throw error;
+    }
+};
+
+// 获取用户收藏的帖子列表（复用likes表）
+const getUserFavorites = async (userId) => {
+    try {
+        // 获取用户点赞的帖子作为收藏
+        const _sql = `
+            SELECT 
+                p.id,
+                p.content,
+                p.image_url,
+                p.location,
+                p.created_at,
+                p.updated_at,
+                u.id as user_id,
+                u.nickname,
+                u.avatar,
+                l.created_at as favorite_time
+            FROM likes l
+            LEFT JOIN posts p ON l.post_id = p.id
+            LEFT JOIN users u ON p.user_id = u.id
+            WHERE l.user_id = ?
+            ORDER BY l.created_at DESC
+        `;
+        const favorites = await allServices.query(_sql, [userId]);
+        return favorites;
+    } catch (error) {
+        console.error('获取用户点赞错误:', error);
+        throw error;
+    }
+};
+
+// 更新用户资料
+const userUpdateProfile = async (userId, updateData) => {
+    try {
+        const { escape } = require('../utils/security.js');
+        
+        // 构建更新SQL
+        const updateFields = [];
+        const updateValues = [];
+        
+        // 定义允许更新的字段
+        const allowedFields = ['username', 'nickname', 'email', 'phone', 'gender', 'school', 'major', 'grade', 'bio', 'avatar'];
+        
+        // 动态构建更新字段
+        allowedFields.forEach(field => {
+            if (updateData[field] !== undefined) {
+                updateFields.push(`${field} = ?`);
+                updateValues.push(escape(updateData[field]));
+            }
+        });
+        
+        if (updateFields.length === 0) {
+            return { success: false, message: '没有需要更新的字段' };
+        }
+        
+        // 添加用户ID到参数列表
+        updateValues.push(userId);
+        const updateSql = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
+        
+        // 执行更新
+        const result = await allServices.query(updateSql, updateValues);
+        
+        if (result.affectedRows > 0) {
+            // 获取更新后的用户信息
+            const getUserSql = 'SELECT id, username, nickname, email, phone, gender, school, major, grade, bio, avatar, created_at FROM users WHERE id = ?';
+            const updatedUser = await allServices.query(getUserSql, [userId]);
+            
+            return { 
+                success: true, 
+                message: '更新成功',
+                data: updatedUser[0]
+            };
+        } else {
+            return { success: false, message: '更新失败，用户不存在' };
+        }
+    } catch (error) {
+        console.error('更新用户资料错误:', error);
+        return { success: false, message: '更新失败: ' + error.message };
+    }
+};
+
 module.exports = {
     allServices,
+    query: allServices.query,
     userLogin,
     userRegister,
+    userUpdateProfile,
     getPostList,
     getPostDetail,
     getPostLikesInfo,
@@ -446,4 +555,6 @@ module.exports = {
     sendMessage,
     markMessagesAsRead,
     publishPost,
+    getUserPosts,
+    getUserFavorites,
 };
