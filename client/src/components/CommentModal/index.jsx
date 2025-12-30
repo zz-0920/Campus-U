@@ -37,9 +37,9 @@ export default function CommentModal({ visible, onClose, postId, onCommentSubmit
     }
   }
 
-  // 处理键盘事件
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  // 处理键盘事件 - Cmd/Ctrl + Enter 发布
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault()
       handleSubmit()
     }
@@ -59,9 +59,15 @@ export default function CommentModal({ visible, onClose, postId, onCommentSubmit
       <div className={styles['modal-content']} onClick={handleModalClick}>
         {/* 弹窗头部 */}
         <div className={styles['modal-header']}>
-          <h3>写评论</h3>
           <button className={styles['close-btn']} onClick={onClose}>
             <Cross />
+          </button>
+          <button
+            className={`${styles['submit-btn']} ${!commentText.trim() || isSubmitting ? styles['disabled'] : ''}`}
+            onClick={handleSubmit}
+            disabled={!commentText.trim() || isSubmitting}
+          >
+            {isSubmitting ? '发布中...' : '发布'}
           </button>
         </div>
 
@@ -69,33 +75,25 @@ export default function CommentModal({ visible, onClose, postId, onCommentSubmit
         <div className={styles['comment-input-area']}>
           <textarea
             className={styles['comment-textarea']}
-            placeholder="写下你的评论..."
+            placeholder="发布你的回复"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            maxLength={500}
+            onKeyDown={handleKeyDown}
+            maxLength={280}
             autoFocus
           />
-          <div className={styles['char-count']}>
-            {commentText.length}/500
+          <div className={styles['input-footer']}>
+            <div className={styles['hint-text']}>
+              {commentText.length === 0 && '按 Cmd/Ctrl + Enter 发布'}
+            </div>
+            <div className={styles['char-count']}>
+              {commentText.length > 0 && (
+                <span className={commentText.length > 280 ? styles['over-limit'] : ''}>
+                  {commentText.length}/280
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-
-        {/* 底部操作区域 */}
-        <div className={styles['modal-footer']}>
-          <button 
-            className={styles['cancel-btn']} 
-            onClick={onClose}
-          >
-            取消
-          </button>
-          <button 
-            className={`${styles['submit-btn']} ${!commentText.trim() || isSubmitting ? styles['disabled'] : ''}`}
-            onClick={handleSubmit}
-            disabled={!commentText.trim() || isSubmitting}
-          >
-            {isSubmitting ? '发布中...' : '发布'}
-          </button>
         </div>
       </div>
     </div>

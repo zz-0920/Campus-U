@@ -1,6 +1,6 @@
 import Tabbar from '@/components/Tabbar/Tabbar';
 import styles from './index.module.less'
-import { WapNav, VolumeO } from '@react-vant/icons';
+import { SettingO, Search } from '@react-vant/icons';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getChatList } from '../../api/message';
@@ -15,10 +15,10 @@ export default function Message() {
     try {
       setLoading(true);
 
-      
+
       const response = await getChatList();
       console.log('API响应:', response);
-      
+
       if (response.code === '1') {
         setChatList(response.data);
         console.log('聊天列表数据:', response.data);
@@ -45,24 +45,19 @@ export default function Message() {
     navigate(`/message/${chatUserId}`);
   };
 
-  const handleSystemMessageClick = () => {
-    console.log('查看系统消息');
-    // 这里可以添加系统消息页面跳转逻辑
-  };
-
   // 格式化时间显示
   const formatTime = (timeString) => {
     const messageTime = new Date(timeString);
     const now = new Date();
     const diffTime = now - messageTime;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) {
       // 今天，显示时间
-      return messageTime.toLocaleTimeString('zh-CN', { 
-        hour: '2-digit', 
+      return messageTime.toLocaleTimeString('zh-CN', {
+        hour: '2-digit',
         minute: '2-digit',
-        hour12: false 
+        hour12: false
       });
     } else if (diffDays === 1) {
       return '昨天';
@@ -70,8 +65,8 @@ export default function Message() {
       return `${diffDays}天前`;
     } else {
       return messageTime.toLocaleDateString('zh-CN', {
-        month: '2-digit',
-        day: '2-digit'
+        month: 'short',
+        day: 'numeric'
       });
     }
   };
@@ -79,47 +74,46 @@ export default function Message() {
   return (
     <div className={styles.container}>
       <div className={styles['header']}>
-        <div className={styles['title']}>
-          校园U+
+        <div className={styles['header-top']}>
+          <div className={styles['avatar-placeholder']}></div>
+          <div className={styles['title']}>
+            消息
+          </div>
+          <div className={styles['settings']}>
+            <SettingO />
+          </div>
         </div>
-        <div className={styles['search']}>
-          <WapNav  />
+        <div className={styles['search-bar']}>
+          <div className={styles['search-input-wrapper']}>
+            <Search />
+            <input type="text" placeholder="搜索私信" />
+          </div>
         </div>
       </div>
-      
-      <div className={styles.chatList}>
-        {/* 系统消息置顶 */}
-        <div className={styles.systemMessage} onClick={handleSystemMessageClick}>
-          <div className={styles.systemAvatar}>
-            <VolumeO />
-          </div>
-          <div className={styles.systemContent}>
-            <div className={styles.systemName}>系统消息</div>
-            <div className={styles.systemText}>欢迎使用校园U+，开始你的校园社交之旅！</div>
-          </div>
-          <div className={styles.systemTime}>今天</div>
-        </div>
 
+      <div className={styles.chatList}>
         {/* 用户聊天列表 */}
         {loading ? (
           <div className={styles.loading}>加载中...</div>
         ) : chatList.length > 0 ? (
           chatList.map(chat => (
-            <div 
-              key={chat.chat_user_id} 
+            <div
+              key={chat.chat_user_id}
               className={styles.chatItem}
               onClick={() => handleChatClick(chat.chat_user_id)}
             >
               <div className={styles.avatar}>
                 <img
-                  src={chat.avatar || 'https://img01.yzcdn.cn/vant/cat.jpeg'} 
-                  alt={chat.nickname} 
+                  src={chat.avatar || 'https://img01.yzcdn.cn/vant/cat.jpeg'}
+                  alt={chat.nickname}
                 />
               </div>
               <div className={styles.content}>
                 <div className={styles.topRow}>
                   <div className={styles.name}>{chat.nickname}</div>
-                  <div className={styles.time}>{formatTime(chat.last_message_time)}</div>
+                  <div className={styles.meta}>
+                    <span className={styles.time}>{formatTime(chat.last_message_time)}</span>
+                  </div>
                 </div>
                 <div className={styles.bottomRow}>
                   <div className={styles.lastMessage}>{chat.last_message}</div>
@@ -131,10 +125,14 @@ export default function Message() {
             </div>
           ))
         ) : (
-          <div className={styles.emptyState}>暂无聊天记录</div>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyTitle}>欢迎来到你的收件箱！</div>
+            <div className={styles.emptyDesc}>在校园U+上与其他人发私信，进行私密对话。</div>
+            <button className={styles.newMessageBtn}>撰写私信</button>
+          </div>
         )}
       </div>
-      
+
       <Tabbar />
     </div>
   )

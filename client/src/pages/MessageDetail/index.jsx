@@ -5,7 +5,7 @@ import { getChatMessages, sendMessage } from '../../api/message';
 import styles from './index.module.less';
 
 export default function MessageDetail() {
-    const { userId } = useParams(); // 聊天对象的用户ID
+    const { userId } = useParams();
     const navigate = useNavigate();
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -17,7 +17,6 @@ export default function MessageDetail() {
     const [chatUser, setChatUser] = useState(null);
     const [currentUserId, setCurrentUserId] = useState(null);
 
-    // 获取当前用户信息
     useEffect(() => {
         const userInfo = localStorage.getItem('userInfo');
         if (userInfo) {
@@ -26,7 +25,6 @@ export default function MessageDetail() {
         }
     }, []);
 
-    // 获取聊天记录
     const fetchMessages = async () => {
         try {
             setLoading(true);
@@ -35,7 +33,6 @@ export default function MessageDetail() {
             if (response.code === '1') {
                 setMessages(response.data);
 
-                // 设置聊天对象信息（从第一条消息中获取）
                 if (response.data.length > 0) {
                     const firstMessage = response.data[0];
                     const chatUserInfo = {
@@ -59,7 +56,6 @@ export default function MessageDetail() {
         }
     };
 
-    // 发送消息
     const handleSendMessage = async () => {
         if (!newMessage.trim() || sending) return;
 
@@ -72,11 +68,9 @@ export default function MessageDetail() {
             });
 
             if (response.code === '1') {
-                // 添加新消息到列表
                 setMessages(prev => [...prev, response.data]);
                 setNewMessage('');
 
-                // 滚动到底部
                 setTimeout(() => {
                     scrollToBottom();
                 }, 100);
@@ -90,12 +84,10 @@ export default function MessageDetail() {
         }
     };
 
-    // 滚动到底部
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // 处理回车发送
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -103,7 +95,6 @@ export default function MessageDetail() {
         }
     };
 
-    // 格式化时间
     const formatTime = (timeString) => {
         const messageTime = new Date(timeString);
         const now = new Date();
@@ -134,21 +125,18 @@ export default function MessageDetail() {
         }
     };
 
-    // 页面加载时获取消息
     useEffect(() => {
         if (currentUserId) {
             fetchMessages();
         }
     }, [userId, currentUserId]);
 
-    // 消息更新时滚动到底部
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
 
     return (
         <div className={styles.container}>
-            {/* 头部导航 */}
             <div className={styles.header}>
                 <div className={styles.headerLeft} onClick={() => navigate(-1)}>
                     <ArrowLeft size={20} />
@@ -172,7 +160,6 @@ export default function MessageDetail() {
                 </div>
             </div>
 
-            {/* 消息列表 */}
             <div className={styles.messagesContainer}>
                 {loading ? (
                     <div className={styles.loading}>加载中...</div>
@@ -181,7 +168,7 @@ export default function MessageDetail() {
                         {messages.map((message, index) => {
                             const isCurrentUser = message.sender_id === currentUserId;
                             const showTime = index === 0 ||
-                                (new Date(message.created_at) - new Date(messages[index - 1].created_at)) > 5 * 60 * 1000; // 5分钟间隔显示时间
+                                (new Date(message.created_at) - new Date(messages[index - 1].created_at)) > 5 * 60 * 1000;
 
                             return (
                                 <div key={message.id} className={styles.messageGroup}>
@@ -191,25 +178,16 @@ export default function MessageDetail() {
                                         </div>
                                     )}
                                     <div className={`${styles.messageItem} ${isCurrentUser ? styles.currentUser : styles.otherUser}`}>
-                                        {!isCurrentUser && (
-                                            <img
-                                                src={message.sender_avatar}
-                                                alt={message.sender_nickname}
-                                                className={styles.messageAvatar}
-                                            />
-                                        )}
+                                        <img
+                                            src={message.sender_avatar}
+                                            alt={message.sender_nickname}
+                                            className={styles.messageAvatar}
+                                        />
                                         <div className={styles.messageContent}>
                                             <div className={styles.messageBubble}>
                                                 {message.content}
                                             </div>
                                         </div>
-                                        {isCurrentUser && (
-                                            <img
-                                                src={message.sender_avatar}
-                                                alt={message.sender_nickname}
-                                                className={styles.messageAvatar}
-                                            />
-                                        )}
                                     </div>
                                 </div>
                             );
@@ -221,7 +199,6 @@ export default function MessageDetail() {
                 )}
             </div>
 
-            {/* 输入框 */}
             <div className={styles.inputContainer}>
                 <div className={styles.inputWrapper}>
                     <textarea

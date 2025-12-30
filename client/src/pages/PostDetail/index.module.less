@@ -1,7 +1,7 @@
-// PostDetail页面样式
+// PostDetail页面样式 - X风格
 .post-detail {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #fff;
   display: flex;
   flex-direction: column;
 }
@@ -13,28 +13,34 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #f5f5f5;
+  background: #fff;
+  color: #536471;
 
   .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #e3e3e3;
-    border-top: 3px solid #1890ff;
+    border: 3px solid #eff3f4;
+    border-top: 3px solid #1d9bf0;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
   }
 
   p {
-    color: #666;
-    font-size: 14px;
+    color: #536471;
+    font-size: 15px;
     margin: 0;
   }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 // 顶部导航栏
@@ -43,39 +49,39 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: #fff;
-  border-bottom: 1px solid #e8e8e8;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #eff3f4;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
   .header-left,
   .header-right {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
 
     &:hover {
-      background: #f0f0f0;
+      background: rgba(0, 0, 0, 0.03);
     }
 
     svg {
       width: 20px;
       height: 20px;
-      color: #333;
+      color: #0f1419;
     }
   }
 
   .header-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f1419;
     text-align: center;
   }
 }
@@ -84,23 +90,23 @@
 .content {
   flex: 1;
   background: #fff;
-  margin: 8px 0;
-  padding: 20px 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eff3f4;
 }
 
 // 用户信息
 .user-info {
   display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+  align-items: flex-start;
+  margin-bottom: 12px;
 
   .user-avatar {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 12px;
-    border: 2px solid #f0f0f0;
+    flex-shrink: 0;
 
     img {
       width: 100%;
@@ -113,27 +119,29 @@
     flex: 1;
 
     .user-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 4px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f1419;
+      margin-bottom: 2px;
+      line-height: 20px;
     }
 
     .post-time {
-      font-size: 13px;
-      color: #999;
+      font-size: 15px;
+      color: #536471;
+      line-height: 20px;
     }
   }
 }
 
 // 动态内容
 .post-content {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
+    font-size: 23px;
+    line-height: 28px;
+    color: #0f1419;
     margin: 0;
     word-wrap: break-word;
   }
@@ -141,16 +149,16 @@
 
 // 动态图片
 .post-image {
-  margin-bottom: 16px;
-  border-radius: 8px;
+  margin-bottom: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #f8f8f8;
+  border: 1px solid #cfd9de;
 
   img {
     width: 100%;
     height: auto;
     display: block;
-    max-height: 400px;
+    max-height: 500px;
     object-fit: cover;
   }
 }
@@ -158,59 +166,78 @@
 // 统计数据
 .post-stats {
   display: flex;
-  gap: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #eff3f4;
+  margin-bottom: 4px;
+  font-size: 15px;
+  line-height: 20px;
 
-  .stats-item {
-    span {
-      font-size: 13px;
-      color: #666;
-    }
+  .stats-number {
+    color: #0f1419;
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  .stats-label {
+    color: #536471;
+    margin-right: 12px;
+  }
+
+  .stats-separator {
+    color: #536471;
+    margin-right: 12px;
   }
 }
 
-// 底部操作栏
+// 操作栏
 .action-bar {
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 12px 0;
-  background: #fff;
-  border-top: 1px solid #f0f0f0;
-  position: sticky;
-  bottom: 0;
-  z-index: 100;
+  border-bottom: 1px solid #eff3f4;
 
   .action-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 4px;
-    padding: 8px 16px;
-    border-radius: 8px;
+    gap: 8px;
+    color: #536471;
+    font-size: 13px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    color: #666;
-    min-width: 60px;
-
-    &:hover {
-      background: #f8f9fa;
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
+    transition: color 0.2s;
+    padding: 8px 12px;
+    border-radius: 4px;
 
     svg {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
     }
 
-    span {
-      font-size: 12px;
-      margin: 0;
+    &:hover {
+      color: #1d9bf0;
+
+      svg {
+        background-color: rgba(29, 155, 240, 0.1);
+        border-radius: 50%;
+        padding: 4px;
+      }
+    }
+
+    &:nth-child(3):hover {
+      color: #f91880;
+
+      svg {
+        background-color: rgba(249, 24, 128, 0.1);
+      }
+    }
+
+    &:nth-child(2):hover {
+      color: #00ba7c;
+
+      svg {
+        background-color: rgba(0, 186, 124, 0.1);
+      }
     }
   }
 }
@@ -218,18 +245,16 @@
 // 评论区域
 .comments-section {
   background: #fff;
-  margin-top: 8px;
-  padding: 16px;
+  padding: 0;
 
   .comments-header {
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 16px;
+    border-bottom: 1px solid #eff3f4;
 
     h3 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #333;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f1419;
       margin: 0;
     }
   }
@@ -237,17 +262,22 @@
   .comments-list {
     .comment-item {
       display: flex;
-      padding: 12px 0;
-      border-bottom: 1px solid #f8f8f8;
-      
+      padding: 12px 16px;
+      border-bottom: 1px solid #eff3f4;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+      }
+
       &:last-child {
         border-bottom: none;
       }
 
       .comment-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 25%;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
         overflow: hidden;
         margin-right: 12px;
         flex-shrink: 0;
@@ -267,54 +297,48 @@
           .comment-user {
             display: flex;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
 
             .comment-nickname {
-              font-size: 14px;
-              font-weight: 500;
-              color: #333;
-              margin-right: 8px;
+              font-size: 15px;
+              font-weight: 700;
+              color: #0f1419;
+              margin-right: 4px;
             }
 
             .comment-time {
-              font-size: 12px;
-              color: #999;
+              font-size: 15px;
+              color: #536471;
             }
           }
 
           .comment-text {
-            font-size: 14px;
-            line-height: 1.4;
-            color: #333;
-            margin: 0 0 8px 0;
+            font-size: 15px;
+            line-height: 20px;
+            color: #0f1419;
+            margin: 0;
             word-wrap: break-word;
           }
 
           .comment-actions {
             display: flex;
             gap: 16px;
+            margin-top: 8px;
 
             .comment-action {
               display: flex;
               align-items: center;
               gap: 4px;
-              padding: 4px 8px;
-              border-radius: 12px;
               cursor: pointer;
-              transition: all 0.2s ease;
-              background: transparent;
+              transition: all 0.2s;
+              color: #536471;
 
               &:hover {
-                background: #f5f5f5;
-              }
-
-              &:active {
-                transform: scale(0.95);
+                color: #1d9bf0;
               }
 
               span {
-                font-size: 12px;
-                color: #999;
+                font-size: 13px;
               }
             }
           }
@@ -324,15 +348,16 @@
 
     .no-comments {
       text-align: center;
-      padding: 60px 0;
+      padding: 60px 20px;
 
       .no-comments-icon {
         margin-bottom: 12px;
+        color: #536471;
       }
 
       p {
-        font-size: 14px;
-        color: #999;
+        font-size: 15px;
+        color: #536471;
         margin: 0;
       }
     }
@@ -343,21 +368,21 @@
     position: sticky;
     bottom: 0;
     background: #fff;
-    padding: 12px 0 0 0;
-    margin-top: 16px;
-    border-top: 1px solid #f0f0f0;
+    padding: 12px 16px;
+    border-top: 1px solid #eff3f4;
 
     .comment-input-wrapper {
       display: flex;
       align-items: center;
-      background: #f8f9fa;
+      background: #fff;
+      border: 1px solid #eff3f4;
       border-radius: 20px;
       padding: 8px 16px;
-      transition: all 0.3s ease;
+      transition: all 0.2s;
 
       &:focus-within {
-        background: #fff;
-        box-shadow: 0 0 0 1px #1890ff;
+        border-color: #1d9bf0;
+        box-shadow: 0 0 0 1px #1d9bf0;
       }
 
       .comment-input {
@@ -365,24 +390,12 @@
         border: none;
         background: transparent;
         outline: none;
-        font-size: 14px;
-        color: #333;
+        font-size: 15px;
+        color: #0f1419;
         padding: 4px 0;
 
         &::placeholder {
-          color: #999;
-        }
-      }
-
-      .comment-emoji {
-        margin-left: 8px;
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 50%;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: #f0f0f0;
+          color: #536471;
         }
       }
     }
@@ -392,253 +405,34 @@
 // 响应式设计
 @media (max-width: 768px) {
   .content {
-    padding: 16px 12px;
+    padding: 12px;
   }
 
   .header {
     padding: 10px 12px;
 
     .header-title {
-      font-size: 16px;
+      font-size: 18px;
     }
   }
 
   .user-info {
     .user-avatar {
-      width: 45px;
-      height: 45px;
-    }
-
-    .user-details {
-      .user-name {
-        font-size: 15px;
-      }
-
-      .post-time {
-        font-size: 12px;
-      }
+      width: 40px;
+      height: 40px;
     }
   }
 
   .post-content {
     p {
-      font-size: 15px;
-    }
-  }
-
-  .action-bar {
-    .action-item {
-      padding: 6px 12px;
-      min-width: 50px;
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
-
-      span {
-        font-size: 11px;
-      }
+      font-size: 20px;
+      line-height: 24px;
     }
   }
 
   .comments-section {
-    padding: 12px;
-
-    .comments-list {
-      .comment-item {
-        padding: 10px 0;
-
-        .comment-avatar {
-          width: 32px;
-          height: 32px;
-          margin-right: 10px;
-        }
-
-        .comment-content {
-          .comment-main {
-            .comment-user {
-              .comment-nickname {
-                font-size: 13px;
-              }
-
-              .comment-time {
-                font-size: 11px;
-              }
-            }
-
-            .comment-text {
-              font-size: 13px;
-            }
-
-            .comment-actions {
-              gap: 12px;
-
-              .comment-action {
-                padding: 3px 6px;
-
-                span {
-                  font-size: 11px;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
     .comment-input-section {
-      .comment-input-wrapper {
-        padding: 6px 12px;
-
-        .comment-input {
-          font-size: 13px;
-        }
-      }
-    }
-  }
-}
-
-// 深色模式支持
-@media (prefers-color-scheme: dark) {
-  .post-detail {
-    background: #1a1a1a;
-  }
-
-  .header {
-    background: #2d2d2d;
-    border-bottom-color: #404040;
-
-    .header-title {
-      color: #fff;
-    }
-
-    .header-left,
-    .header-right {
-      &:hover {
-        background: #404040;
-      }
-
-      svg {
-        color: #fff;
-      }
-    }
-  }
-
-  .content {
-    background: #2d2d2d;
-  }
-
-  .user-info {
-    .user-details {
-      .user-name {
-        color: #fff;
-      }
-
-      .post-time {
-        color: #999;
-      }
-    }
-  }
-
-  .post-content {
-    p {
-      color: #e0e0e0;
-    }
-  }
-
-  .action-bar {
-    background: #2d2d2d;
-    border-top-color: #404040;
-
-    .action-item {
-      color: #ccc;
-
-      &:hover {
-        background: #404040;
-      }
-    }
-  }
-
-  .comments-section {
-    background: #2d2d2d;
-
-    .comments-header {
-      border-bottom-color: #404040;
-
-      h3 {
-        color: #fff;
-      }
-    }
-
-    .comments-list {
-      .comment-item {
-        border-bottom-color: #404040;
-
-        .comment-content {
-          .comment-main {
-            .comment-user {
-              .comment-nickname {
-                color: #fff;
-              }
-
-              .comment-time {
-                color: #999;
-              }
-            }
-
-            .comment-text {
-              color: #e0e0e0;
-            }
-
-            .comment-actions {
-              .comment-action {
-                &:hover {
-                  background: #404040;
-                }
-
-                span {
-                  color: #999;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .no-comments {
-        p {
-          color: #999;
-        }
-      }
-    }
-
-    .comment-input-section {
-      background: #2d2d2d;
-      border-top-color: #404040;
-
-      .comment-input-wrapper {
-        background: #404040;
-
-        &:focus-within {
-          background: #2d2d2d;
-          box-shadow: 0 0 0 1px #1890ff;
-        }
-
-        .comment-input {
-          color: #fff;
-
-          &::placeholder {
-            color: #999;
-          }
-        }
-
-        .comment-emoji {
-          &:hover {
-            background: #555;
-          }
-        }
-      }
+      padding: 10px 12px;
     }
   }
 }

@@ -1,5 +1,5 @@
 import styles from './index.module.less';
-import { Search, Plus } from '@react-vant/icons';
+import { Search, Plus, CommentO, LikeO, ShareO, Exchange } from '@react-vant/icons';
 import axios from '@/api/axios';
 import { createFromIconfontCN } from '@react-vant/icons';
 import { useEffect, useState } from 'react';
@@ -19,7 +19,6 @@ export default function Home() {
   const fetchPostList = async () => {
     try {
       const res = await axios.get('/post/list')
-      // console.log(res.data)
       setPostList(res.data)
     } catch (error) {
       console.log(error)
@@ -34,67 +33,74 @@ export default function Home() {
   return (
     <div className={tabbarStyles['page-with-tabbar']}>
       <div className={styles['header']}>
-        <div className={styles['title']}>
-          校园U+
+        <div className={styles['avatar-container']}>
+          {/* Placeholder for user avatar in header if needed, or just keep it simple */}
         </div>
-        <div className={styles['search']}>
-          <Search />
+        <div className={styles['title']}>
+          <img src="https://img.icons8.com/color/48/twitter--v1.png" alt="Logo" className={styles['logo']} />
+        </div>
+        <div className={styles['header-right']}>
+          <Search fontSize={20} />
         </div>
       </div>
+
       <div className={styles['content']}>
         {
           postList.map((item) => (
-            <div className={styles['content-item']} key={item.id} onClick={() => {
+            <div className={styles['post-item']} key={item.id} onClick={() => {
               navigate(`/post/detail/${item.id}`)
             }}>
-              <div className={styles['content-item-header']}>
-                <div className={styles['content-item-header-avatar']}>
-                  <img src={item.avatar} alt="" />
-                </div>
-                <p className={styles['content-item-header-name']}>
-                  {item.nickname}
-                </p>
-                <div className={styles['content-item-header-time']}>
-                  {formatTime(item.updated_at)}
-                </div>
+              <div className={styles['post-avatar']}>
+                <img src={item.avatar} alt="" />
               </div>
-              <div className={styles['content-item-content']}>
-                <p>
+
+              <div className={styles['post-content-wrapper']}>
+                <div className={styles['post-header']}>
+                  <span className={styles['post-name']}>{item.nickname}</span>
+                  <span className={styles['post-handle']}>@{item.username || 'user'}</span>
+                  <span className={styles['post-dot']}>·</span>
+                  <span className={styles['post-time']}>{formatTime(item.updated_at)}</span>
+                </div>
+
+                <div className={styles['post-text']}>
                   {item.content}
-                </p>
+                </div>
+
                 {
                   item.image_url && (
-                    <div className={styles['content-item-content-image']}>
+                    <div className={styles['post-image']}>
                       <img src={`http://localhost:3000${item.image_url}`} alt="" />
                     </div>
                   )
                 }
-              </div>
-              {/* <div className={styles['content-item-footer']}>
-                <div className={styles['content-item-footer-item']}>
-                  <div>
+
+                <div className={styles['post-actions']}>
+                  <div className={styles['action-item']} onClick={(e) => { e.stopPropagation(); }}>
+                    <CommentO />
+                    <span>{item.comment_count || 0}</span>
+                  </div>
+                  <div className={styles['action-item']} onClick={(e) => { e.stopPropagation(); }}>
+                    <Exchange />
+                    <span>{item.repost_count || 0}</span>
+                  </div>
+                  <div className={styles['action-item']} onClick={(e) => { e.stopPropagation(); }}>
                     <LikeO />
-                    <p>点赞</p>
+                    <span>{item.like_count || 0}</span>
                   </div>
-                  <div>
-                    <IconFont name='icon-pinglun' />
-                    <p>评论</p>
-                  </div>
-                  <div>
+                  <div className={styles['action-item']} onClick={(e) => { e.stopPropagation(); }}>
                     <ShareO />
-                    <p>分享</p>
                   </div>
                 </div>
-              </div> */}
+              </div>
             </div>
           ))
         }
       </div>
       <Tabbar />
-      
+
       {/* 浮动发布按钮 */}
-      <div 
-        className={styles['floating-publish-btn']} 
+      <div
+        className={styles['floating-publish-btn']}
         onClick={() => navigate('/publish')}
       >
         <Plus size={24} />

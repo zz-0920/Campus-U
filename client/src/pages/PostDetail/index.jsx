@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from '@/api/axios'
 import { formatTime } from '@/utils/index.js'
-import { ArrowLeft, LikeO, ShareO, MoreO } from '@react-vant/icons'
+import { ArrowLeft, LikeO, ShareO } from '@react-vant/icons'
 import { createFromIconfontCN } from '@react-vant/icons'
 import CommentModal from '@/components/CommentModal'
 
@@ -50,7 +50,7 @@ export default function PostDetail() {
         post_id: id,
         user_id: userInfo.id
       })
-      
+
       // 根据后端返回的action更新状态
       if (response.data.action === 'liked') {
         setLiked(true)
@@ -82,12 +82,6 @@ export default function PostDetail() {
     setShowCommentModal(true)
   }
 
-  const handleCommentReply = (commentId, nickname) => {
-    // 回复评论功能
-    console.log('回复评论:', commentId, nickname)
-    setShowCommentModal(true)
-  }
-
   useEffect(() => {
     fetchPost()
   }, [id])
@@ -108,9 +102,9 @@ export default function PostDetail() {
         <div className={styles['header-left']} onClick={handleBack}>
           <ArrowLeft />
         </div>
-        <div className={styles['header-title']}>动态详情</div>
+        <div className={styles['header-title']}>帖子</div>
         <div className={styles['header-right']}>
-          <MoreO />
+          {/* Empty for symmetry */}
         </div>
       </div>
 
@@ -139,30 +133,32 @@ export default function PostDetail() {
           </div>
         )}
 
-        {/* 点赞和浏览数据 */}
+        {/* 点赞和评论数据 */}
         <div className={styles['post-stats']}>
-          <div className={styles['stats-item']}>
-            <span>{likeCount} 次点赞</span>
-          </div>
-          <div className={styles['stats-item']}>
-            <span>{comments.comment_count} 评论</span>
-          </div>
+          <span className={styles['stats-number']}>{likeCount}</span>
+          <span className={styles['stats-label']}>次点赞</span>
+          <span className={styles['stats-separator']}>·</span>
+          <span className={styles['stats-number']}>{comments.comment_count || 0}</span>
+          <span className={styles['stats-label']}>条评论</span>
         </div>
-      </div>
 
-      {/* 底部操作栏 */}
-      <div className={styles['action-bar']}>
-        <div className={styles['action-item']} onClick={handleLike}>
-          <LikeO color={liked ? '#ff4757' : '#666'} />
-          <span style={{ color: liked ? '#ff4757' : '#666' }}>点赞</span>
-        </div>
-        <div className={styles['action-item']} onClick={handleComment}>
-          <IconFont name='icon-pinglun' />
-          <span>评论</span>
-        </div>
-        <div className={styles['action-item']} onClick={handleShare}>
-          <ShareO />
-          <span>分享</span>
+        {/* 操作按钮 */}
+        <div className={styles['action-bar']}>
+          <div className={styles['action-item']} onClick={handleComment}>
+            <IconFont name='icon-pinglun' />
+            <span>{comments.comment_count || 0}</span>
+          </div>
+          <div className={styles['action-item']}>
+            <IconFont name='icon-zhuanfa' />
+            <span>0</span>
+          </div>
+          <div className={styles['action-item']} onClick={handleLike}>
+            <LikeO color={liked ? '#f91880' : '#536471'} />
+            <span style={{ color: liked ? '#f91880' : '#536471' }}>{likeCount}</span>
+          </div>
+          <div className={styles['action-item']} onClick={handleShare}>
+            <ShareO />
+          </div>
         </div>
       </div>
 
@@ -185,8 +181,6 @@ export default function PostDetail() {
                       <span className={styles['comment-time']}>{formatTime(item.created_at)}</span>
                     </div>
                     <p className={styles['comment-text']}>{item.content}</p>
-                    <div className={styles['comment-actions']}>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -194,29 +188,29 @@ export default function PostDetail() {
           ) : (
             <div className={styles['no-comments']}>
               <div className={styles['no-comments-icon']}>
-                <IconFont name="icon-pinglun" style={{fontSize: '48px', color: '#ddd'}} />
+                <IconFont name="icon-pinglun" style={{ fontSize: '48px', color: '#536471' }} />
               </div>
               <p>还没有评论，快来抢沙发吧~</p>
             </div>
           )}
         </div>
-        
+
         {/* 评论输入框 */}
         <div className={styles['comment-input-section']}>
           <div className={styles['comment-input-wrapper']}>
-            <input 
-              type="text" 
-              placeholder="写评论..." 
+            <input
+              type="text"
+              placeholder="写评论..."
               className={styles['comment-input']}
               onFocus={() => setShowCommentModal(true)}
             />
           </div>
         </div>
       </div>
-      
+
       {/* 添加评论弹出框 */}
       {showCommentModal && (
-        <CommentModal 
+        <CommentModal
           visible={showCommentModal}
           onClose={() => setShowCommentModal(false)}
           postId={id}
